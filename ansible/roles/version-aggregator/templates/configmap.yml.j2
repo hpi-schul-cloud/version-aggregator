@@ -6,7 +6,6 @@ metadata:
   labels:
     app: version-aggregator
 data:
-  BACKEND_URL: "http://api-svc:{{ PORT_SERVER }}/api/"
   version.client.url: "http://client-svc:3100/version"
   version.nuxt-client.url: "http://nuxtclient-svc:{{ NUXTCLIENT_PORT }}/nuxtversion"
   version.server.url: "http://api-svc:{{ PORT_SERVER }}/serverversion"
