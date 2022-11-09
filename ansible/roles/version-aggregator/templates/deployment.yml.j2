@@ -32,7 +32,7 @@ spec:
         image: {{ VERSION_AGGREGATOR_IMAGE }}:{{ VERSION_AGGREGATOR_IMAGE_TAG }}
         imagePullPolicy: IfNotPresent
         ports:
-        - name: version-aggregator-http
+        - name: http
           containerPort: {{ VERSION_AGGREGATOR_PORT }}
           protocol: TCP
         envFrom:
