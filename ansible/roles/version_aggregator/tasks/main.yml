@@ -1,12 +1,17 @@
+  - name: version aggregator configmap
+    kubernetes.core.k8s:
+      kubeconfig: ~/.kube/config
+      namespace: "{{ NAMESPACE }}"
+      template: configmap.yml.j2
+
+  - name: version aggregator deployment
+    kubernetes.core.k8s:
+      kubeconfig: ~/.kube/config
+      namespace: "{{ NAMESPACE }}"
+      template: deployment.yml.j2
+
   - name: version aggregator service
     kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
-      template: version-aggregator-svc.yml.j2
-      
-  - name: version aggregator deployment
-    kubernetes.core.k8s:
-      kubeconfig: ~/.kube/config 
-      namespace: "{{ NAMESPACE }}"
-      template: version-aggregator-deployment.yml.j2
-      
+      template: service.yml.j2
