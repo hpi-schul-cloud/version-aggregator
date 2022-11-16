@@ -37,10 +37,10 @@ class WebServer(BaseHTTPRequestHandler):
         self.end_headers()
 
 
-for k, v in os.environ.items():
-    if k.startswith('version.'):
-        re_result = re.search(r"(\bversion\.\b)(\b.+\b)\.url", k)
-        services[re_result.group(2)] = v
+for key, value in os.environ.items():
+    if key.startswith('version.'):
+        re_result = re.search(r"(\bversion\.\b)(\b.+\b)\.url", key)
+        services[re_result.group(2)] = value
 
 httpd = HTTPServer(('0.0.0.0', 8080), WebServer)
 httpd.serve_forever()

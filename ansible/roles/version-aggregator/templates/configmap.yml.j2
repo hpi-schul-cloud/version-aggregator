@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: version-aggregator-configmap
+  namespace: {{ NAMESPACE }}
+  labels:
+    app: version-aggregator
+data:
+  version.client.url: "http://client-svc:3100/version"
+  version.nuxt-client.url: "http://nuxtclient-svc:{{ NUXTCLIENT_PORT }}/nuxtversion"
+  version.server.url: "http://api-svc:{{ PORT_SERVER }}/serverversion"
