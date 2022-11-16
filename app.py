@@ -30,11 +30,13 @@ class WebServer(BaseHTTPRequestHandler):
                     result[service] = 'unavailable'
 
             result['services-unavailable'] = encountered_issues
-            self.send_response(200, json.dumps(result))
-            self.send_header('Content-type', 'application/json')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(result).encode(encoding='UTF-8'))
         else:
             self.send_response(404)
-        self.end_headers()
+            self.end_headers()
 
 
 for key, value in os.environ.items():
