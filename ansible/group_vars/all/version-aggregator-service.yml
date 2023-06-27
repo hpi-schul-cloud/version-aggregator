@@ -1,4 +1,4 @@
 ---
 VERSION_AGGREGATOR_PORT: 8080
-VERSION_AGGREGATOR_IMAGE: schulcloud/version-aggregator
+VERSION_AGGREGATOR_IMAGE: quay.io/schulcloudverbund/version-aggregator
 
