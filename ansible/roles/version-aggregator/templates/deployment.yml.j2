@@ -7,6 +7,9 @@ metadata:
     app: version-aggregator
     app.kubernetes.io/part-of: schulcloud-verbund
     app.kubernetes.io/version: {{ VERSION_AGGREGATOR_IMAGE_TAG }}
+    app.kubernetes.io/name: version-aggregator
+    app.kubernetes.io/component: version-aggregator
+    app.kubernetes.io/managed-by: ansible
     git.branch: {{ VERSION_AGGREGATOR_BRANCH_NAME }}
     git.repo: {{ VERSION_AGGREGATOR_REPO_NAME }}
 spec:
@@ -26,6 +29,9 @@ spec:
         app: version-aggregator
         app.kubernetes.io/part-of: schulcloud-verbund
         app.kubernetes.io/version: {{ VERSION_AGGREGATOR_IMAGE_TAG }}
+        app.kubernetes.io/name: version-aggregator
+        app.kubernetes.io/component: version-aggregator
+        app.kubernetes.io/managed-by: ansible
         git.branch: {{ VERSION_AGGREGATOR_BRANCH_NAME }}
         git.repo: {{ VERSION_AGGREGATOR_REPO_NAME }}
       annotations:
