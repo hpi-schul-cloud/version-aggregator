@@ -33,7 +33,7 @@ class WebServer(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps(result).encode(encoding='UTF-8'))
+            self.wfile.write(json.dumps(result, sort_keys=True, indent=4).encode(encoding='UTF-8'))
         else:
             self.send_response(404)
             self.end_headers()
