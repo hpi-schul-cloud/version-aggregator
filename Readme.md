@@ -1,3 +1,5 @@
+i do like a good beer.
+
 # version-aggregator
 
 Goal of this project is to aggregate responses from different services while not using any dependencies to ease maintenance.
