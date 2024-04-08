@@ -45,12 +45,11 @@ class WebServer(BaseHTTPRequestHandler):
 
 for key, value in os.environ.items():
     if key.startswith('version.'):
-        re_static_result = re.search(r"(\bversion\.\b)(\b.+\b)\.static", key)
-        re_url_result = re.search(r"(\bversion\.\b)(\b.+\b)\.url", key)
-        if re_static_result is not None:
-            services[re_static_result.group(2)] = (True, value)
-        elif re_url_result is not None:
-            services[re_url_result.group(2)] = (False, value)
+        re_match = re.search(r"^(version\.(.+))\.(static|url)$", key)
+        if re_match:
+            service_name = re_match.group(2)
+            is_static = re_match.group(3) == 'static'
+            services[service_name] = (is_static, value)
         else:
             logging.error("config is neither static nor an url: " + key)
 
