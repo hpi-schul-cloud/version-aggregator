@@ -17,17 +17,21 @@ class WebServer(BaseHTTPRequestHandler):
             result = {}
             encountered_issues = False
             for service in services:
-                service_url = services[service]
-                logging.info('calling for client ' + service + ': ' + service_url)
-                request = urllib.request.Request(service_url)
-                try:
-                    with urllib.request.urlopen(request) as response:
-                        data = json.loads(response.read().decode('UTF-8'))
-                        result[service] = data
-                except URLError:
-                    logging.error('service not available ' + service_url, exc_info=True)
-                    encountered_issues = True
-                    result[service] = 'unavailable'
+                static_version, _value = services[service]
+                if static_version:
+                    result[service] = _value
+                else:
+                    service_url = _value
+                    logging.info('calling for client ' + service + ': ' + service_url)
+                    request = urllib.request.Request(service_url)
+                    try:
+                        with urllib.request.urlopen(request) as response:
+                            data = json.loads(response.read().decode('UTF-8'))
+                            result[service] = data
+                    except URLError:
+                        logging.error('service not available ' + service_url, exc_info=True)
+                        encountered_issues = True
+                        result[service] = 'unavailable'
 
             result['services-unavailable'] = encountered_issues
             self.send_response(200)
@@ -41,8 +45,14 @@ class WebServer(BaseHTTPRequestHandler):
 
 for key, value in os.environ.items():
     if key.startswith('version.'):
-        re_result = re.search(r"(\bversion\.\b)(\b.+\b)\.url", key)
-        services[re_result.group(2)] = value
+        re_match = re.search(r"^(version\.(.+))\.(static|url)$", key)
+        if re_match:
+            service_name = re_match.group(2)
+            is_static = re_match.group(3) == 'static'
+            services[service_name] = (is_static, value)
+        else:
+            logging.error("config is neither static nor an url: " + key)
+
 
 httpd = HTTPServer(('0.0.0.0', 8080), WebServer)
 httpd.serve_forever()
