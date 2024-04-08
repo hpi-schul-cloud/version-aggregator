@@ -5,6 +5,7 @@ Goal of this project is to aggregate responses from different services while not
 ## configuration
 
 configuration happens using env vars prefixed with `version.`.
+you may not use static and url together, static will take priority.
 
 ## usage
 
@@ -18,5 +19,6 @@ docker run --rm \
 -eversion.client.url='http://esel:3100/version' \
 -eversion.nuxt-client.url='http://esel:4000/nuxtversion' \
 -eversion.server.url='http://esel:3030/serverversion' \
+-eversion.dof_app_deploy.static='696'
 version-aggregator
 ```

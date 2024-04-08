@@ -52,6 +52,9 @@ spec:
         envFrom:
         - configMapRef:
             name: version-aggregator-configmap
+        env:
+          - name: version.dof_app_deploy.static
+            value: {{ DOF_APP_DEPLOY_BRANCH_NAME }}
         resources:
           limits:
             cpu: {{ VERSION_AGGREGATOR__CPU_LIMITS|default("1000m", true) }}
