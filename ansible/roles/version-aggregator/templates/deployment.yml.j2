@@ -53,6 +53,7 @@ spec:
         - configMapRef:
             name: version-aggregator-configmap
         env:
+        # we need that env here to ensure to get restarted when it changes!
           - name: version.dof_app_deploy.static
             value: {{ DOF_APP_DEPLOY_BRANCH_NAME }}
         resources:
