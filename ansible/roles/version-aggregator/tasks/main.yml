@@ -3,15 +3,21 @@
       kubeconfig: ~/.kube/config
       namespace: "{{ NAMESPACE }}"
       template: configmap.yml.j2
+    tags:
+      - configmap
 
   - name: version aggregator deployment
     kubernetes.core.k8s:
       kubeconfig: ~/.kube/config
       namespace: "{{ NAMESPACE }}"
       template: deployment.yml.j2
+    tags:
+      - deployment
 
   - name: version aggregator service
     kubernetes.core.k8s:
       kubeconfig: ~/.kube/config 
       namespace: "{{ NAMESPACE }}"
       template: service.yml.j2
+    tags:
+      - service
