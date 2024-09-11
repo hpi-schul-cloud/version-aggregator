@@ -79,17 +79,6 @@ jobs:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PRIVATE_KEY_PASSWORD }}
           DIGEST: ${{ steps.build_and_push.outputs.digest }}
 
-      - name: Sign the images with GitHub OIDC Token
-        env:
-          DIGEST: ${{ steps.build_and_push.outputs.digest }}
-          TAGS: ${{ steps.docker_meta_img.outputs.tags }}
-        run: |
-          images=""
-          for tag in ${TAGS}; do
-            images+="${tag}@${DIGEST} "
-          done
-          cosign sign --yes ${images}
-
   branch_meta:
     runs-on: ubuntu-latest
     outputs:
