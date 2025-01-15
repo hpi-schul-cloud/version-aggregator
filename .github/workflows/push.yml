@@ -52,7 +52,7 @@ jobs:
       - name: Build and push ${{ github.repository }}
         id: build_and_push
         if: ${{ env.IMAGE_EXISTS == 0 }}
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -63,7 +63,7 @@ jobs:
           labels: ${{ steps.docker_meta_img.outputs.labels }}
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.6.0
+        uses: sigstore/cosign-installer@v3.7.0
 
       - name: Sign image with a key
         run: |
@@ -136,7 +136,7 @@ jobs:
       security-events: write
     steps:
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
           format: 'sarif'
