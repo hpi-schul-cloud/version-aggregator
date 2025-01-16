@@ -66,6 +66,7 @@ jobs:
         uses: sigstore/cosign-installer@v3.7.0
 
       - name: Sign image with a key
+        if: ${{ env.IMAGE_EXISTS == 0 }}
         run: |
           images=""
           for tag in ${TAGS}; do
