@@ -61,7 +61,9 @@ jobs:
           pull: true
           tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
           labels: ${{ steps.docker_meta_img.outputs.labels }}
-
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
+          
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.7.0
 
