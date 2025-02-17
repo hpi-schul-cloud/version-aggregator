@@ -67,3 +67,18 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PRIVATE_KEY_PASSWORD }}
           DIGEST: ${{ steps.build_and_push.outputs.digest }}
+
+
+  create_release:
+      runs-on: ubuntu-latest
+      permissions:
+          contents: write
+      steps:
+          - name: generate sbom via dependency-graph
+            run: gh api repos/${{ github.repository }}/dependency-graph/sbom > dependencies.sbom.json
+            env:
+                GH_TOKEN: ${{ github.token }}
+          - name: create release
+            uses: softprops/action-gh-release@v2
+            with:
+                files: dependencies.sbom.json
