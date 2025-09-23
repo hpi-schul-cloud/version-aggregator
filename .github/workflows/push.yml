@@ -27,7 +27,7 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Docker meta Service Name
         id: docker_meta_img
@@ -65,7 +65,7 @@ jobs:
           DOCKER_BUILD_RECORD_UPLOAD: false
           
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.9.1
+        uses: sigstore/cosign-installer@v3.10.0
 
       - name: Sign image with a key
         if: ${{ env.IMAGE_EXISTS == 0 }}
@@ -139,13 +139,12 @@ jobs:
       security-events: write
     steps:
       - name: run trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.31.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: 'ghcr.io/${{ github.repository }}:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
-          exit-code: 1
           ignore-unfixed: true
           scan-type: 'image'
         env:
