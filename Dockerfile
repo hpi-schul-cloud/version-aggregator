@@ -1,27 +1,30 @@
-FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS builder
+FROM ghcr.io/astral-sh/uv:trixie-slim AS builder
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 
 WORKDIR /app
+
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+RUN uv python install 3.14
+
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-dev --no-editable
 
 COPY app.py /app
 RUN uv sync --frozen --no-dev --no-editable
 
-# Runtime stage
-FROM docker.io/python:3.14-slim
+FROM gcr.io/distroless/cc-debian13:nonroot
 
 WORKDIR /app
 
-# Copy the virtual environment and application code
-COPY --from=builder /app/.venv /app/.venv
-COPY --from=builder /app/app.py /app/app.py
+# Copy the standalone Python and virtual environment
+COPY --from=builder --chown=root:nonroot /opt/python /opt/python
+COPY --from=builder --chown=root:nonroot /app/.venv /app/.venv
+COPY --from=builder --chown=root:nonroot /app/app.py /app/app.py
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
-# Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["python", "/app/app.py"]
+CMD ["/app/.venv/bin/python", "/app/app.py"]
