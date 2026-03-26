@@ -1,6 +1,30 @@
-FROM docker.io/python:3.13-alpine
+FROM ghcr.io/astral-sh/uv:trixie-slim AS builder
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-WORKDIR /usr/src/app
-COPY app.py app.py
+WORKDIR /app
 
-ENTRYPOINT ["python3", "app.py"]
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+RUN uv python install 3.14
+
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev --no-editable
+
+COPY app.py /app
+RUN uv sync --frozen --no-dev --no-editable
+
+FROM gcr.io/distroless/cc-debian13:nonroot
+
+WORKDIR /app
+
+# Copy the standalone Python and virtual environment
+COPY --from=builder --chown=root:nonroot /opt/python /opt/python
+COPY --from=builder --chown=root:nonroot /app/.venv /app/.venv
+COPY --from=builder --chown=root:nonroot /app/app.py /app/app.py
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 8080
+
+CMD ["/app/.venv/bin/python", "/app/app.py"]

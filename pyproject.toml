@@ -1,0 +1,7 @@
+[project]
+name = "version-aggregator"
+version = "0.1.0"
+description = "A lightweight, zero-dependency service that aggregates version information from multiple services into a single endpoint"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
