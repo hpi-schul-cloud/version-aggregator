@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: version-aggregator-default-allow
+  namespace: {{ NAMESPACE }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: version-aggregator
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-controller
+      ports:
+        - port: {{ VERSION_AGGREGATOR_PORT }}
+          protocol: TCP
+  egress:
+    # DNS
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+
+    # Legacy client version endpoint
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ NAMESPACE }}
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: client
+      ports:
+        - port: 3100
+          protocol: TCP
+
+    # Nuxt client version endpoint
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ NAMESPACE }}
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: nuxtclient
+      ports:
+        - port: 4000
+          protocol: TCP
+
+    # Server version endpoint
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ NAMESPACE }}
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: api
+      ports:
+        - port: {{ PORT_SERVER }}
+          protocol: TCP
